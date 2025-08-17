@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SPIELESAMMLUNG 🎮</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Heading font (bold, playful alternative) -->
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #f6f7fb;
+      --ink: #0e1030;
+      --primary: #4f66ff;   /* button blue */
+      --primary-press: #3e50cc;
+      --primary-border: #2c3fb3;
+      --random: #ff8c1a;    /* orange */
+      --random-press: #e57700;
+      --radius: 14px;
+      --shadow: 0 8px 18px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.06);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:var(--bg); color:var(--ink);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+    }
+
+    .app{
+      min-height:100dvh; /* mobile viewport */
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 28px 18px 22px;
+      display:flex; flex-direction:column; gap:18px;
+    }
+
+    header{
+      text-align:center; margin-top:6px; margin-bottom:6px;
+    }
+    h1{
+      font-family: "Luckiest Guy", cursive; letter-spacing:.5px;
+      margin:0; font-size: clamp(28px, 7vw, 44px);
+      color:#1f44b8; text-shadow: 0 2px 0 #e5ebff, 0 4px 0 #cdd8ff;
+    }
+
+    /* Scroll area for many links */
+    .list{
+      flex:1; overflow:auto; -webkit-overflow-scrolling:touch;
+      display:flex; flex-direction:column; gap:14px; padding: 10px 6px 8px;
+    }
+
+    .btn{ appearance:none; -webkit-appearance:none; cursor:pointer; user-select:none;
+      width:100%; border:2px solid transparent; border-radius: var(--radius);
+      font-weight:800; font-size:20px; line-height:1; padding:18px 18px; text-align:center; text-decoration:none;
+      box-shadow: var(--shadow);
+      transition: transform .05s ease, filter .2s ease, box-shadow .2s ease;
+    }
+    .btn:active{ transform: translateY(1px) scale(.997); }
+    .btn:focus-visible{ outline:none; box-shadow: 0 0 0 3px rgba(79,102,255,.35), var(--shadow); }
+
+    .btn.link{
+      color:#fff; background: var(--primary);
+      border-color: var(--primary-border);
+    }
+    .btn.link:active{ background:var(--primary-press); }
+
+    .btn.random{ background: var(--random); color:#222; border-color:#bf5d00; }
+    .btn.random:active{ background: var(--random-press); }
+
+    footer{ padding: 8px 6px 0; }
+    .note{ text-align:center; font-size:12px; opacity:.6; }
+
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <h1>SPIELESAMMLUNG</h1>
+    </header>
+
+    <!--
+      👉 Spiele-Links hier pflegen: Unten in games[] Namen & URLs anpassen.
+      Diese Liste rendert automatisch Buttons. Neue Einträge = neuer Button.
+    -->
+
+    <section id="list" class="list" aria-label="Spieleliste"></section>
+
+    <!-- Der Zufall-Button steht UNTER der Liste. Bei vielen Links ist er per Scroll erreichbar. -->
+    <button id="randomBtn" class="btn random" type="button">Zufall</button>
+
+    <footer>
+      <p class="note">Tippe auf einen Link, um das Spiel in einem neuen Tab zu öffnen.</p>
+    </footer>
+  </main>
+
+  <script>
+    // ▼▼▼ Spiele hier eintragen (Name + URL zu deinen GitHub Pages) ▼▼▼
+    const games = [
+      { name: "Link 1 – Word Imposter", url: "https://dein-user.github.io/word-imposter/" },
+      { name: "Link 2 – Top 5",        url: "https://dein-user.github.io/top5/" },
+      { name: "Link 3 – Wellenlänge",  url: "https://dein-user.github.io/wellenlaenge/" },
+      { name: "Link 4 – Quizduell",    url: "https://dein-user.github.io/quizduell/" },
+      { name: "Link 5 – Flashback",    url: "https://dein-user.github.io/flashback/" },
+      // Weitere Einträge beliebig hinzufügen …
+    ];
+    // ▲▲▲ Ende der konfigurierbaren Liste ▲▲▲
+
+    const list = document.getElementById('list');
+
+    // Buttons aus der Liste rendern
+    games.forEach((g, idx) => {
+      const a = document.createElement('a');
+      a.className = 'btn link';
+      a.href = g.url;
+      a.textContent = g.name || `Spiel ${idx+1}`;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      list.appendChild(a);
+    });
+
+    // Zufall öffnet ein zufälliges Spiel in neuem Tab
+    document.getElementById('randomBtn').addEventListener('click', () => {
+      if (!games.length) return;
+      const r = Math.floor(Math.random() * games.length);
+      const chosen = games[r];
+      // kleine Press-Animation
+      const btn = event.currentTarget;
+      btn.style.transform = 'translateY(1px) scale(.997)';
+      setTimeout(() => btn.style.transform = '', 120);
+      window.open(chosen.url, '_blank', 'noopener');
+    });
+
+    // Optional: Wenn du die Seite in einer GitHub-Pages Subdirectory hostest,
+    // sind keine besonderen Pfade nötig, da alle URLs vollständig sind.
+  </script>
+</body>
+</html>
